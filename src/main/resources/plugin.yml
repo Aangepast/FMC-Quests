@@ -1,5 +1,11 @@
-name: FMC Quests
+name: FMC-Quests
 version: '${project.version}'
 main: dev.aangepast.fmcquests.Main
 api-version: 1.18
 authors: [ Aangepast ]
+commands:
+  quest:
+    aliases:
+      - uitdagingen
+      - quests
+    usage: /<command>

@@ -3,6 +3,7 @@ package dev.aangepast.fmcquests.listener;
 import dev.aangepast.fmcquests.Main;
 import dev.aangepast.fmcquests.managers.Quest;
 import dev.aangepast.fmcquests.managers.User;
+import dev.aangepast.fmcquests.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public class onLeave implements Listener {
@@ -21,21 +23,20 @@ public class onLeave implements Listener {
     }
 
     @EventHandler
-    public void onPlayerLeave(PlayerQuitEvent e){
-        for (Map.Entry<User, String> entry : plugin.getUsers().getUsers().entrySet()){
-            if(entry.getValue().equals(e.getPlayer().getUniqueId().toString())){
+    public void onPlayerLeave(PlayerQuitEvent e) throws IOException {
 
-                File file = new File(plugin.getDataFolder() + "/users/" + e.getPlayer().getUniqueId().toString() + ".yml");
-                FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        File file = new File(plugin.getDataFolder() + "/users/" + e.getPlayer().getUniqueId().toString() + ".yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-                for (Quest quest : entry.getKey().getQuests()){
-                    if(config.getStringList("quests").contains(quest.getRawName())){config.set("quests." + quest.getRawName() + "progress", );}
-                }
+        User user = Utils.getUser(e.getPlayer().getUniqueId().toString(), plugin);
 
+        if(user == null){return;}
 
-                plugin.getUsers().removeUser(entry.getKey());
-            }
+        for (Quest quest : user.getQuests()){
+            if(config.getStringList("quests").contains(quest.getRawName())){config.set("quests." + quest.getRawName() + ".progress", quest.getProgress());}
         }
+        config.save(file);
+        plugin.getUsers().removeUser(user);
     }
 
 }

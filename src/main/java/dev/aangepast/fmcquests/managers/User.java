@@ -23,5 +23,14 @@ public class User {
         quests.remove(quest);
     }
 
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }
 

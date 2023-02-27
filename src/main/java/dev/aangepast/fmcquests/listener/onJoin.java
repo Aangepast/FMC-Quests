@@ -33,6 +33,8 @@ public class onJoin implements Listener {
 
         User user = new User();
 
+        user.setUuid(player.getUniqueId().toString());
+
         for(String rawName : quests){
             if(plugin.containsQuest(rawName)){
                 Quest quest = plugin.getQuest(rawName);

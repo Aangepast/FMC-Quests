@@ -1,0 +1,13 @@
+jagen_20_elks:
+  name: "&4Jagen"
+  rawName: "jagen_20_elks"
+  amount: 20
+  description: "Dood 20 elanden"
+  isDaily: true
+  isWeekly: false
+  isLifetime: false
+  isPersonal: true
+  isKingdom: false
+  rewardOrbs: 5
+  rewardXp: 100
+  rewardPoints: 150
