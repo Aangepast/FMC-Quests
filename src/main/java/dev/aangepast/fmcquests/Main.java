@@ -67,7 +67,6 @@ public final class Main extends JavaPlugin {
         List<Quest> tempQuests = questList;
         List<Quest> questsToRemove = new ArrayList<>();
 
-        getLogger().info("Loaded temp quests.");
 
         for(int i = 0;pages>i;i++){
             List<Quest> page = new ArrayList<>();
@@ -77,17 +76,17 @@ public final class Main extends JavaPlugin {
             int x = 0;
             for (Quest quest : tempQuests){
                 if (x > 44) {break;}
-                getLogger().info("Adding quest to page");
                 x++;
-                getLogger().info("Adding: " + quest.getRawName());
                 page.add(quest);
-                getLogger().info("Added! Removing from temp quests...");
-                tempQuests.remove(quest); /// ConcurrentModificationException, kan niet uit lijst verwijderen terwijl je de lijst looped
+                questsToRemove.add(quest);
             }
 
-            // remove hier de quests van de lijst
+            for(Quest quest : questsToRemove){
+                tempQuests.remove(quest);
+            }
 
-            getLogger().info("Adding page to questPages");
+            questsToRemove.clear();
+
             questPages.add(page);
         }
 
@@ -157,5 +156,13 @@ public final class Main extends JavaPlugin {
             uitdagingInventories.remove(uuid);
         }
         this.uitdagingInventories.put(uuid, inv);
+    }
+
+    public List<List<Quest>> getQuestPages() {
+        return questPages;
+    }
+
+    public void setQuestPages(List<List<Quest>> questPages) {
+        this.questPages = questPages;
     }
 }
