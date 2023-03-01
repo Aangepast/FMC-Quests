@@ -2,7 +2,9 @@ jagen_20_elks:
   name: "&4Jagen"
   rawName: "jagen_20_elks"
   amount: 20
-  description: "Dood 20 elanden"
+  description: "Dood 20 mannelijke elanden"
+  type: "SkeletalKnight"
+  activity: "MMKill"
   isDaily: true
   isWeekly: false
   isLifetime: false

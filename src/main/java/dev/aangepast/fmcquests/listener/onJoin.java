@@ -3,7 +3,6 @@ package dev.aangepast.fmcquests.listener;
 import dev.aangepast.fmcquests.Main;
 import dev.aangepast.fmcquests.managers.Quest;
 import dev.aangepast.fmcquests.managers.User;
-import dev.aangepast.fmcquests.utils.Utils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -35,12 +34,21 @@ public class onJoin implements Listener {
         user.setUuid(player.getUniqueId().toString());
 
         for(String name : config.getKeys(false)){
-            if(name.equalsIgnoreCase("stats")){continue;}
+
+            if(name.equalsIgnoreCase("stats")){
+                user.setXpToReceive(config.getInt("stats.xp"));
+                user.setOrbsToReceive(config.getInt("stats.orbs"));
+                user.setPoints(config.getInt("stats.points"));
+                user.setCompleted(config.getInt("stats.completed"));
+                continue;
+            }
+
             Quest quest = plugin.getQuest(name);
 
-            if(quest != null){
+            if(quest != null){;
                 quest.setProgress(config.getInt(name+".progression"));
                 user.addQuest(quest);
+                plugin.getLogger().info(quest.getActivity());
                 continue;
             }
 

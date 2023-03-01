@@ -5,6 +5,7 @@ import dev.aangepast.fmcquests.inventories.uitdagingenInventory;
 import dev.aangepast.fmcquests.listener.inventoryClick;
 import dev.aangepast.fmcquests.listener.onJoin;
 import dev.aangepast.fmcquests.listener.onLeave;
+import dev.aangepast.fmcquests.listener.onMMKill;
 import dev.aangepast.fmcquests.managers.Quest;
 import dev.aangepast.fmcquests.managers.UserManager;
 import org.bukkit.Bukkit;
@@ -34,6 +35,7 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new onJoin(this), this);
         Bukkit.getPluginManager().registerEvents(new onLeave(this), this);
         Bukkit.getPluginManager().registerEvents(new inventoryClick(this), this);
+        Bukkit.getPluginManager().registerEvents(new onMMKill(this), this);
         Bukkit.getPluginCommand("quest").setExecutor(new questCommand(this));
 
 
@@ -44,6 +46,8 @@ public final class Main extends JavaPlugin {
 
             quest.setName(getConfig().getString(key + ".name"));
             quest.setRawName(key);
+            quest.setType(getConfig().getString(key + ".type"));
+            quest.setActivity(getConfig().getString(key + ".activity"));
             quest.setAmount(getConfig().getInt(key + ".amount"));
             quest.setDescription(getConfig().getString(key + ".description"));
             quest.setDaily(getConfig().getBoolean(key + ".isDaily"));
@@ -54,7 +58,9 @@ public final class Main extends JavaPlugin {
             quest.setRewardOrbs(getConfig().getInt(key + ".rewardOrbs"));
             quest.setRewardXp(getConfig().getInt(key + ".rewardXp"));
             quest.setRewardPoints(getConfig().getInt(key + ".rewardPoints"));
+            quest.setCompleted(false);
 
+            getLogger().info(quest.getActivity());
             getLogger().info("Quest " + quest.getName() + " geladen!");
 
             questList.add(quest);

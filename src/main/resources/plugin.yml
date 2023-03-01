@@ -3,6 +3,8 @@ version: '${project.version}'
 main: dev.aangepast.fmcquests.Main
 api-version: 1.18
 authors: [ Aangepast ]
+softdepend:
+  - MythicMobs
 commands:
   quest:
     aliases:

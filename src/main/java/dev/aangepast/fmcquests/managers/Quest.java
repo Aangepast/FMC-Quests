@@ -8,12 +8,16 @@ public class Quest {
     private boolean weekly;
     private boolean daily;
     private boolean lifetime;
+    private boolean completed;
+    private long unix;
     private boolean personal;
     private boolean kingdom;
     private int rewardOrbs;
     private int rewardXp;
     private int rewardPoints;
     private String description;
+    private String type;
+    private String activity;
     private int progress;
 
     public String getName() {
@@ -118,5 +122,37 @@ public class Quest {
 
     public void setProgress(int progress) {
         this.progress = progress;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getActivity() {
+        return activity;
+    }
+
+    public void setActivity(String activity) {
+        this.activity = activity;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public long getUnix() {
+        return unix;
+    }
+
+    public void setUnix(long unix) {
+        this.unix = unix;
     }
 }

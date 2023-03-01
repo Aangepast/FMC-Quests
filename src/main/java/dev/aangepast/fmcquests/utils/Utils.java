@@ -85,7 +85,7 @@ public class Utils {
 
     }
 
-    public static boolean stopQuest(Quest quest, Player player, Main plugin) throws IOException {
+    public static boolean stopQuest(Quest quest, Player player, Main plugin, int pageNmr) throws IOException {
         File file = new File(plugin.getDataFolder() + "/users/" + player.getUniqueId().toString() + ".yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
@@ -100,27 +100,36 @@ public class Utils {
         config.set(quest.getRawName() + ".rawName", null);
         config.set(quest.getRawName() + "", null);
 
-        quest.setProgress(0);
-        user.getQuests().remove(quest);
-        user.removeQuest(quest);
+        Quest playerQuest = getQuest(quest.getRawName(), user);
+        user.removeQuest(playerQuest);
+        user.getQuests().remove(playerQuest);
+
+        config.save(file);
 
         player.playSound(player.getLocation(), "block.note_block.bit",1,1);
         uitdagingenInventory inv = new uitdagingenInventory();
-        inv.openUitdagingen(player, plugin, 1);
+        inv.openUitdagingen(player, plugin, pageNmr);
 
         player.sendMessage(ChatColor.RED + "Je hebt de quest " + ChatColor.translateAlternateColorCodes('&', quest.getName()) + ChatColor.RED + " gestopt.");
 
-        return savePlayer(player, plugin);
+        savePlayer(player, plugin);
+
+        return true;
 
     }
 
     public static boolean savePlayer(Player player, Main plugin) throws IOException {
-        File file = new File(plugin.getDataFolder() + "/users/" + player.getUniqueId().toString() + ".yml");
+        File file = new File(plugin.getDataFolder() + "/users/" + player.getUniqueId() + ".yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
         User user = Utils.getUser(player.getUniqueId().toString(), plugin);
 
         if(user == null){return false;}
+
+        config.set("stats.orbs", user.getOrbsToReceive());
+        config.set("stats.xp", user.getXpToReceive());
+        config.set("stats.points", user.getPoints());
+        config.set("stats.completed", user.getCompleted());
 
         for (Quest quest : user.getQuests()){
             config.set(quest.getRawName()+".progression", quest.getProgress());
@@ -129,8 +138,26 @@ public class Utils {
         config.save(file);
         plugin.getUsers().removeUser(user);
         plugin.getUsers().addUser(user, player.getUniqueId().toString());
-        player.sendMessage(ChatColor.GRAY + ChatColor.ITALIC.toString() + "Je profiel is opgeslagen.");
         return true;
+    }
+
+    public static void completeQuest(Player player, Quest quest, Main plugin) throws IOException {
+        User user = getUser(player.getUniqueId().toString(), plugin);
+
+        if(user == null){return;}
+
+        player.sendMessage(ChatColor.GREEN + "Je hebt de quest " + ChatColor.translateAlternateColorCodes('&', quest.getName()) + " voltooid!");
+        player.playSound(player.getLocation(), "entity.player.levelup", 1,1);
+
+        user.addOrbs(quest.getRewardOrbs());
+        user.addXp(quest.getRewardXp());
+        user.addPoints(quest.getRewardPoints());
+        user.addCompleted(1);
+        quest.setProgress(-1);
+        quest.setUnix(System.currentTimeMillis() / 1000L);
+
+        savePlayer(player, plugin);
+
     }
 
     public static Quest getQuest(String rawName, User user){
