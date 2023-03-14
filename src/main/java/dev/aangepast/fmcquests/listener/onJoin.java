@@ -47,8 +47,15 @@ public class onJoin implements Listener {
 
             if(quest != null){;
                 quest.setProgress(config.getInt(name+".progression"));
+                quest.setActivity(config.getString(name+".Activity"));
                 user.addQuest(quest);
-                plugin.getLogger().info(quest.getActivity());
+                plugin.getLogger().info("Quest " + quest.getRawName() + " geladen!");
+                long unix = config.getLong(name+".unix");
+                if(unix > 0){
+                    quest.setUnix(unix);
+                    continue;
+                }
+                quest.setUnix(0);
                 continue;
             }
 
@@ -58,7 +65,10 @@ public class onJoin implements Listener {
             quest1.setDescription(name);
             quest1.setLifetime(true);
             quest1.setProgress(config.getInt(name+".progression"));
+            quest1.setActivity(config.getString(name+".Activity"));
             user.addQuest(quest1);
+
+            plugin.getLogger().info("Kon quest " + name + " niet vinden, er is een nieuwe tijdelijke quest aangemaakt.");
 
         }
 

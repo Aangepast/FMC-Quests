@@ -2,10 +2,7 @@ package dev.aangepast.fmcquests;
 
 import dev.aangepast.fmcquests.commands.questCommand;
 import dev.aangepast.fmcquests.inventories.uitdagingenInventory;
-import dev.aangepast.fmcquests.listener.inventoryClick;
-import dev.aangepast.fmcquests.listener.onJoin;
-import dev.aangepast.fmcquests.listener.onLeave;
-import dev.aangepast.fmcquests.listener.onMMKill;
+import dev.aangepast.fmcquests.listener.*;
 import dev.aangepast.fmcquests.managers.Quest;
 import dev.aangepast.fmcquests.managers.UserManager;
 import org.bukkit.Bukkit;
@@ -36,6 +33,9 @@ public final class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new onLeave(this), this);
         Bukkit.getPluginManager().registerEvents(new inventoryClick(this), this);
         Bukkit.getPluginManager().registerEvents(new onMMKill(this), this);
+        Bukkit.getPluginManager().registerEvents(new onMobKill(this), this);
+        Bukkit.getPluginManager().registerEvents(new onBlockBreak(this), this);
+        Bukkit.getPluginManager().registerEvents(new onFish(this), this);
         Bukkit.getPluginCommand("quest").setExecutor(new questCommand(this));
 
 
@@ -61,16 +61,16 @@ public final class Main extends JavaPlugin {
             quest.setCompleted(false);
 
             getLogger().info(quest.getActivity());
-            getLogger().info("Quest " + quest.getName() + " geladen!");
+            getLogger().info("Quest " + quest.getRawName() + " geladen!");
 
-            questList.add(quest);
+            this.questList.add(quest);
         }
 
         double pages = Math.ceil(questList.size() / 45f);
 
         getLogger().info("Pages to load: " + pages);
 
-        List<Quest> tempQuests = questList;
+        List<Quest> tempQuests = new ArrayList<Quest>(questList);
         List<Quest> questsToRemove = new ArrayList<>();
 
 
@@ -137,8 +137,9 @@ public final class Main extends JavaPlugin {
     }
 
     public Quest getQuest(String rawName){
-        for(Quest quest : questList){
-            if(quest.getRawName().equals(rawName)){
+        if(getQuestList().size() < 1){getLogger().info("geen quests gevonden");return null;}
+        for(Quest quest : getQuestList()){
+            if(quest.getRawName().equalsIgnoreCase(rawName)){
                 return quest;
             }
         }

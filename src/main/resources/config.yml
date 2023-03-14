@@ -13,3 +13,48 @@ jagen_20_elks:
   rewardOrbs: 5
   rewardXp: 100
   rewardPoints: 150
+kill_75_skeletons:
+  name: "&fKill Monster Skeletons!"
+  rawName: "kill_75_skeletons"
+  amount: 75
+  description: "Versla 75 Monster Skeletons!"
+  type: "SkPack_Archer, SkPack_Warrior"
+  activity: "MMKill"
+  isDaily: false
+  isWeekly: true
+  isLifetime: false
+  isPersonal: true
+  isKingdom: false
+  rewardOrbs: 5
+  rewardXp: 100
+  rewardPoints: 150
+vis_30_cod:
+  name: "&6Vis voor 30 Cod"
+  rawName: "vis_30_cod"
+  amount: 30
+  description: "Ga lekker vissen!"
+  type: "raw cod"
+  activity: "fish"
+  isDaily: true
+  isWeekly: false
+  isLifetime: false
+  isPersonal: true
+  isKingdom: false
+  rewardOrbs: 8
+  rewardXp: 150
+  rewardPoints: 200
+mine_500_stone:
+  name: "&fHeerlijk Hakken!"
+  rawName: "mine_stone_500"
+  amount: 200
+  description: "Hak 500 Steen!"
+  type: "stone"
+  activity: "mine"
+  isDaily: true
+  isWeekly: false
+  isLifetime: false
+  isPersonal: true
+  isKingdom: false
+  rewardOrbs: 5
+  rewardXp: 100
+  rewardPoints: 150

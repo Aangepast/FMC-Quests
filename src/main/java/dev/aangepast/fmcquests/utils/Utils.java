@@ -73,6 +73,21 @@ public class Utils {
 
         if (activeQuests.contains(quest.getRawName())) {return false;}
 
+        int activatedQuests = 0;
+
+        for (String string : activeQuests){
+            Quest quest1 = Utils.getPlayerQuest(string, user);
+            if(quest1 == null){plugin.getLogger().info("No player quest found");continue;}
+            if(quest1.getProgress() > -1){
+                activatedQuests++;
+            }
+        }
+
+        if(activatedQuests > 2){
+            player.sendMessage(ChatColor.RED + "Je kunt maximaal 3 quests actief hebben.");
+            return false;
+        }
+
         quest.setProgress(0);
 
         user.addQuest(quest);
@@ -100,7 +115,7 @@ public class Utils {
         config.set(quest.getRawName() + ".rawName", null);
         config.set(quest.getRawName() + "", null);
 
-        Quest playerQuest = getQuest(quest.getRawName(), user);
+        Quest playerQuest = getPlayerQuest(quest.getRawName(), user);
         user.removeQuest(playerQuest);
         user.getQuests().remove(playerQuest);
 
@@ -134,6 +149,12 @@ public class Utils {
         for (Quest quest : user.getQuests()){
             config.set(quest.getRawName()+".progression", quest.getProgress());
             config.set(quest.getRawName()+".rawName", quest.getRawName());
+            config.set(quest.getRawName()+".Activity", quest.getActivity());
+
+            if(quest.getUnix() > 0){
+                config.set(quest.getRawName()+".unix", quest.getUnix());
+            }
+
         }
         config.save(file);
         plugin.getUsers().removeUser(user);
@@ -146,7 +167,7 @@ public class Utils {
 
         if(user == null){return;}
 
-        player.sendMessage(ChatColor.GREEN + "Je hebt de quest " + ChatColor.translateAlternateColorCodes('&', quest.getName()) + " voltooid!");
+        player.sendMessage(ChatColor.GREEN + "Je hebt de quest " + ChatColor.translateAlternateColorCodes('&', quest.getName()) + ChatColor.GREEN + " voltooid!");
         player.playSound(player.getLocation(), "entity.player.levelup", 1,1);
 
         user.addOrbs(quest.getRewardOrbs());
@@ -160,7 +181,7 @@ public class Utils {
 
     }
 
-    public static Quest getQuest(String rawName, User user){
+    public static Quest getPlayerQuest(String rawName, User user){
         for (Quest quest : user.getQuests()) {
             if(quest.getRawName().equals(rawName)){
                 return quest;

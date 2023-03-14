@@ -34,7 +34,7 @@ public class uitdagingenInventory {
         for(int i = 0; pagina.size() > i;i++) {
             Quest quest = pagina.get(i);
             int progression;
-            Quest playerQuest = Utils.getQuest(quest.getRawName(), user);
+            Quest playerQuest = Utils.getPlayerQuest(quest.getRawName(), user);
 
             if(playerQuest == null){
                 progression=0;
@@ -43,20 +43,17 @@ public class uitdagingenInventory {
             }
 
             if (activeQuests.contains(quest.getRawName())) {
-
+                if(progression == -1){
+                    ItemBuilder itemBuilder = new ItemBuilder(Material.WRITABLE_BOOK, 1).setName(ChatColor.translateAlternateColorCodes('&', quest.getName())).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beschrijving:").addLoreLine(ChatColor.YELLOW + " " + quest.getDescription()).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beloningen:").addLoreLine(ChatColor.DARK_PURPLE + " " + quest.getRewardOrbs() + " Orbs").addLoreLine(ChatColor.LIGHT_PURPLE + " " + quest.getRewardPoints() + " Punten").addLoreLine(ChatColor.AQUA + " " + quest.getRewardXp() + " XP").addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Status: " + ChatColor.GOLD + "Voltooid");
+                    ItemStack item = addTeVoltooienLine(itemBuilder, quest).addLoreLine(" ").addLoreLine(ChatColor.LIGHT_PURPLE + "Deze quest heb je voltooid!").addEnchant(Enchantment.DURABILITY, 1).toItemStack();
+                    item.getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    inv.setItem(i, item);
+                    continue;
+                }
                 ItemBuilder itemBuilder = new ItemBuilder(Material.WRITABLE_BOOK, 1).setName(ChatColor.translateAlternateColorCodes('&', quest.getName())).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beschrijving:").addLoreLine(ChatColor.YELLOW + " " + quest.getDescription()).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beloningen:").addLoreLine(ChatColor.DARK_PURPLE + " " + quest.getRewardOrbs() + " Orbs").addLoreLine(ChatColor.LIGHT_PURPLE + " " + quest.getRewardPoints() + " Punten").addLoreLine(ChatColor.AQUA + " " + quest.getRewardXp() + " XP").addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Status: " + ChatColor.GREEN + "Actief").addLoreLine(ChatColor.WHITE + "Progressie: " + ChatColor.GOLD + progression + "/" + quest.getAmount());
-
                 ItemStack item = addTeVoltooienLine(itemBuilder, quest).addLoreLine(" ").addLoreLine(ChatColor.RED + ChatColor.UNDERLINE.toString() + "Klik om deze uitdaging te annuleren.").toItemStack();
                 inv.setItem(i, item);
                 continue;
-            } else if (progression == -1){
-
-                ItemBuilder itemBuilder = new ItemBuilder(Material.KNOWLEDGE_BOOK, 1).setName(ChatColor.translateAlternateColorCodes('&', quest.getName())).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beschrijving:").addLoreLine(ChatColor.YELLOW + " " + quest.getDescription()).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beloningen:").addLoreLine(ChatColor.DARK_PURPLE + " " + quest.getRewardOrbs() + " Orbs").addLoreLine(ChatColor.LIGHT_PURPLE + " " + quest.getRewardPoints() + " Punten").addLoreLine(ChatColor.AQUA + " " + quest.getRewardXp() + " XP").addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Status: " + ChatColor.GOLD + "Voltooid");
-                ItemStack item = addTeVoltooienLine(itemBuilder, quest).addLoreLine(" ").addLoreLine(ChatColor.LIGHT_PURPLE + "Deze quest heb je voltooid!").addEnchant(Enchantment.DURABILITY, 1).toItemStack();
-                item.getItemMeta().addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                inv.setItem(i, item);
-                continue;
-
             }
 
             ItemBuilder itemBuilder = new ItemBuilder(Material.BOOK, 1).setName(ChatColor.translateAlternateColorCodes('&', quest.getName())).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beschrijving:").addLoreLine(ChatColor.YELLOW + " " + quest.getDescription()).addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Beloningen:").addLoreLine(ChatColor.DARK_PURPLE + " " + quest.getRewardOrbs() + " Orbs").addLoreLine(ChatColor.LIGHT_PURPLE + " " + quest.getRewardPoints() + " Punten").addLoreLine(ChatColor.AQUA + " " + quest.getRewardXp() + " XP").addLoreLine(" ").addLoreLine(ChatColor.WHITE + "Status: " + ChatColor.RED + "Niet actief");

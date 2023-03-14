@@ -4,26 +4,25 @@ import dev.aangepast.fmcquests.Main;
 import dev.aangepast.fmcquests.managers.Quest;
 import dev.aangepast.fmcquests.managers.User;
 import dev.aangepast.fmcquests.utils.Utils;
-import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.io.IOException;
 
-public class onMMKill implements Listener {
+public class onMobKill implements Listener {
 
     private Main plugin;
 
-    public onMMKill(Main plugin){
+    public onMobKill(Main plugin){
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onMythicMobKill(MythicMobDeathEvent e) throws IOException {
-        if(e.getKiller() instanceof Player){
-
-            Player player = (Player) e.getKiller();
+    public void onMobDeath(EntityDeathEvent e) throws IOException {
+        if(e.getEntity().getKiller() != null){
+            Player player = e.getEntity().getKiller();
             User user = Utils.getUser(player.getUniqueId().toString(), plugin);
 
             if(user == null){return;}
@@ -32,8 +31,8 @@ public class onMMKill implements Listener {
 
                 for(Quest quest : user.getQuests()){
                     if(quest.getProgress() > -1){
-                        if(quest.getActivity().equalsIgnoreCase("MMKill")){
-                            if(quest.getType().toLowerCase().contains(e.getMob().getMobType().toLowerCase())){
+                        if(quest.getActivity().equalsIgnoreCase("kill")){
+                            if(quest.getType().toLowerCase().contains(e.getEntity().getType().toString().toLowerCase())){
                                 quest.setProgress(quest.getProgress() + 1);
                                 if(quest.getProgress() >= quest.getAmount()){
                                     Utils.completeQuest(player, quest, plugin);
@@ -44,8 +43,6 @@ public class onMMKill implements Listener {
                 }
 
             }
-
-
         }
     }
 

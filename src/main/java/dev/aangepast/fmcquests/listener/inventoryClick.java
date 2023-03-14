@@ -48,6 +48,10 @@ public class inventoryClick implements Listener {
                 Quest quest = pageQuests.get(clickedSlot);
 
                 if(e.getClickedInventory().getItem(e.getRawSlot()).getType().equals(Material.WRITABLE_BOOK)){
+                    if(e.getClickedInventory().getItem(e.getRawSlot()).getEnchantments().size() > 0){
+                        e.getWhoClicked().sendMessage(ChatColor.GREEN + "Je hebt deze quest al voltooid!");
+                        return;
+                    }
                     Utils.stopQuest(quest, (Player) e.getWhoClicked(), plugin, currentPage);
                     return;
                 }
